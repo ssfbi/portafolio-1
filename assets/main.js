@@ -112,45 +112,87 @@ function animateSkillBars() {
   });
 }
 
+function createServerItem(server) {
+  const item = document.createElement('div');
+  item.className = 'server-item';
+
+  const icon = document.createElement('div');
+  icon.className = 'server-icon custom';
+
+  const img = document.createElement('img');
+  img.src = server.icon;
+  img.alt = `${server.name} logo`;
+  img.loading = 'lazy';
+
+  const fallback = document.createElement('span');
+  fallback.className = 'server-icon-fallback';
+  fallback.textContent = server.fallback || server.name.charAt(0).toUpperCase();
+
+  img.addEventListener('error', () => {
+    img.style.display = 'none';
+    fallback.style.display = 'inline-flex';
+  });
+
+  icon.appendChild(img);
+  icon.appendChild(fallback);
+
+  const info = document.createElement('div');
+  info.className = 'server-info';
+  info.innerHTML = `<h3>${server.name}</h3><span>${server.role}</span>`;
+
+  item.appendChild(icon);
+  item.appendChild(info);
+  return item;
+}
+
 function renderServersFromConfig() {
   if (document.body.dataset.page !== 'servers') return;
-  const list = document.getElementById('server-list-dynamic');
-  if (!list || !window.SERVERS_CONFIG || !Array.isArray(window.SERVERS_CONFIG.servers)) return;
+  const hostingList = document.getElementById('hosting-list-dynamic');
+  const serverList = document.getElementById('server-list-dynamic');
+  if (!window.SERVERS_CONFIG || !hostingList || !serverList) return;
 
-  list.innerHTML = '';
+  const hostings = Array.isArray(window.SERVERS_CONFIG.hostings) ? window.SERVERS_CONFIG.hostings : [];
+  const servers = Array.isArray(window.SERVERS_CONFIG.servers) ? window.SERVERS_CONFIG.servers : [];
 
-  window.SERVERS_CONFIG.servers.forEach((server) => {
-    const item = document.createElement('div');
-    item.className = 'server-item';
+  hostingList.innerHTML = '';
+  serverList.innerHTML = '';
 
-    const icon = document.createElement('div');
-    icon.className = 'server-icon custom';
+  hostings.forEach((h) => hostingList.appendChild(createServerItem(h)));
+  servers.forEach((s) => serverList.appendChild(createServerItem(s)));
 
-    const img = document.createElement('img');
-    img.src = server.icon;
-    img.alt = `${server.name} logo`;
-    img.loading = 'lazy';
+  const hostingCount = document.getElementById('hosting-count');
+  const serverCount = document.getElementById('server-count');
+  if (hostingCount) hostingCount.textContent = String(hostings.length);
+  if (serverCount) serverCount.textContent = String(servers.length);
+}
 
-    const fallback = document.createElement('span');
-    fallback.className = 'server-icon-fallback';
-    fallback.textContent = server.fallback || server.name.charAt(0).toUpperCase();
+function updateExperienceTimer() {
+  const el = document.getElementById('experience-timer');
+  if (!el) return;
 
-    img.addEventListener('error', () => {
-      img.style.display = 'none';
-      fallback.style.display = 'inline-flex';
-    });
+  const startDate = new Date(el.dataset.startDate || '2021-01-01T00:00:00');
 
-    icon.appendChild(img);
-    icon.appendChild(fallback);
+  const tick = () => {
+    const now = new Date();
+    let diff = Math.max(0, now - startDate);
 
-    const info = document.createElement('div');
-    info.className = 'server-info';
-    info.innerHTML = `<h3>${server.name}</h3><span>${server.role}</span>`;
+    const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+    diff -= years * (1000 * 60 * 60 * 24 * 365.25);
+    const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.44));
+    diff -= months * (1000 * 60 * 60 * 24 * 30.44);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff -= days * (1000 * 60 * 60 * 24);
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    diff -= hours * (1000 * 60 * 60);
+    const minutes = Math.floor(diff / (1000 * 60));
+    diff -= minutes * (1000 * 60);
+    const seconds = Math.floor(diff / 1000);
 
-    item.appendChild(icon);
-    item.appendChild(info);
-    list.appendChild(item);
-  });
+    el.textContent = `${years} Años ${months} Meses ${days} Días ${hours} Horas ${minutes} Minutos ${seconds} Segundos`;
+  };
+
+  tick();
+  setInterval(tick, 1000);
 }
 
 function setupPageTransitions() {
@@ -218,6 +260,7 @@ window.addEventListener('load', () => {
   renderServersFromConfig();
   animateSkillBars();
   animateMiniStats();
+  updateExperienceTimer();
 
   if (window.AOS) {
     AOS.init({ duration: 450, easing: 'ease-out-cubic', once: true, offset: 30 });

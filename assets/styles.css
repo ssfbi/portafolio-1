@@ -1705,3 +1705,22 @@ body.page-leave .main-content {
     font-weight: 700;
     color: white;
 }
+
+/* Experience timer */
+.experience-timer {
+    margin-top: .7rem;
+    color: var(--text-accent);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Server split counters */
+.server-count {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+.server-count strong {
+    color: var(--accent-primary);
+}
