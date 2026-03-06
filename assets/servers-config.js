@@ -1,7 +1,7 @@
 window.SERVERS_CONFIG = {
   // Logos PNG en /servers-icons o cualquier ruta válida del proyecto
   hostings: [
-    { name: 'SapphireHost', role: 'General Manager y CEO', icon: 'servers-icons/sapphirehost.png', fallback: 'SH' },
+    { name: 'SapphireHost', role: 'General Manager y CEO', icon: 'servers-icons/sapphire1.png', fallback: 'SH' },
     { name: 'EnderHost', role: 'Soporte Técnico y General', icon: 'servers-icons/enderhost.png', fallback: 'EH' }
   ],
   servers: [
