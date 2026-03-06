@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafolio | Servidores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="servers">
+  <div class="bg-animation"></div>
+  <div class="bg-particles"><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div></div>
+
+  <div class="theme-toggle" onclick="toggleTheme()"><div class="theme-toggle-slider"><i class="fas fa-moon" id="theme-icon"></i></div></div>
+  <button class="mobile-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="profile-section"><div class="profile-img"></div><h2 class="profile-name">Demien</h2><p class="profile-title">SrPatoAC</p></div>
+    <ul class="nav-menu">
+      <li class="nav-item"><a href="index.html" class="nav-link" data-nav="home"><i class="fas fa-house"></i>Inicio</a></li>
+      <li class="nav-item"><a href="achievements.html" class="nav-link" data-nav="achievements"><i class="fas fa-trophy"></i>Logros</a></li>
+      <li class="nav-item"><a href="skills.html" class="nav-link" data-nav="skills"><i class="fas fa-cogs"></i>Especialización</a></li>
+      <li class="nav-item"><a href="education.html" class="nav-link" data-nav="education"><i class="fas fa-graduation-cap"></i>Estudios</a></li>
+      <li class="nav-item"><a href="servers.html" class="nav-link" data-nav="servers"><i class="fas fa-server"></i>Servidores</a></li>
+      <li class="nav-item"><a href="contact.html" class="nav-link" data-nav="contact"><i class="fas fa-envelope"></i>Contacto</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-content category-page">
+    <header class="header" data-aos="fade-up">
+      <div class="header-content">
+        <h1>Demien - SrPatoAC</h1>
+        <p class="subtitle">General Manager | Staff Manager | SS Manager | Developer</p>
+        <p class="experience">Experiencia profesional activa</p>
+        <p class="experience-timer">⏱ <span id="experience-timer" data-start-date="2023-01-01T00:00:00">Calculando experiencia...</span></p>
+      </div>
+    </header>
+
+    <section class="section" data-aos="fade-up">
+      <h2 class="section-title">Hostings</h2>
+      <p class="servers-help">Hostings de Minecraft</p>
+      <div class="server-count">Total hostings: <strong id="hosting-count">0</strong></div>
+      <div id="hosting-list-dynamic" class="server-list"></div>
+    </section>
+
+    <section class="section" data-aos="fade-up">
+      <h2 class="section-title">Servidores</h2>
+      <div class="server-count">Total servidores: <strong id="server-count">0</strong></div>
+      <div id="server-list-dynamic" class="server-list"></div>
+    </section>
+  </main>
+
+  <button class="scroll-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="assets/servers-config.js"></script>
+  <script src="assets/main.js"></script>
+</body>
+</html>
