@@ -1597,3 +1597,111 @@ body.page-leave .main-content {
         transition: none !important;
     }
 }
+
+/* Fix social buttons style */
+.social-btn,
+.contact-btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.social-btn:visited { color: var(--text-primary); }
+
+/* Home mini progress bars */
+.mini-progress {
+    margin-top: 0.7rem;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.mini-progress-fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    transition: width .7s ease-out;
+}
+
+/* Skills statistical bars */
+.skills-bars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+
+.skill-bars-card {
+    background: var(--bg-glass);
+    border: 2px solid var(--border-color);
+    border-radius: 18px;
+    padding: 1.4rem;
+}
+
+.skill-bars-card h3 {
+    color: var(--accent-primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.progress-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: .8rem;
+    color: var(--text-accent);
+}
+
+.progress-bar {
+    margin-top: .45rem;
+    margin-bottom: .35rem;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #20d9f2, #11b8ef);
+    border-radius: 999px;
+    transition: width .65s ease-out;
+}
+
+/* Dynamic server icons from PNG */
+.servers-help {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.server-icon.custom {
+    overflow: hidden;
+    background: linear-gradient(45deg, #0b1220, #18233a);
+}
+
+.server-icon.custom img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.server-icon-fallback {
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+}

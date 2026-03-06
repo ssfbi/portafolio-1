@@ -36,17 +36,15 @@ function scrollToTop() {
 
 function openDiscord() {
   const discordUsername = '@srpatoac';
-  const textToCopy = discordUsername;
-
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(textToCopy)
+    navigator.clipboard.writeText(discordUsername)
       .then(() => showNotification('Discord copiado: ' + discordUsername))
       .catch(() => showNotification('Discord: ' + discordUsername));
     return;
   }
 
   const ta = document.createElement('textarea');
-  ta.value = textToCopy;
+  ta.value = discordUsername;
   document.body.appendChild(ta);
   ta.select();
   try {
@@ -68,7 +66,7 @@ function showNotification(message) {
   const n = document.createElement('div');
   n.className = 'notification';
   n.textContent = message;
-  n.style.cssText = 'position:fixed;top:6rem;right:1.2rem;z-index:9999;padding:.9rem 1.1rem;border-radius:12px;background:linear-gradient(45deg,#06b6d4,#4f46e5);color:#fff;box-shadow:0 10px 20px rgba(0,0,0,.22);transform:translateX(120%);transition:transform .25s ease';
+  n.style.cssText = 'position:fixed;top:6rem;right:1.2rem;z-index:9999;padding:.9rem 1.1rem;border-radius:12px;background:linear-gradient(45deg,#06b6d4,#4f46e5);color:#fff;box-shadow:0 10px 20px rgba(0,0,0,.22);transform:translateX(120%);transition:transform .25s ease;font-family:Poppins,sans-serif';
   document.body.appendChild(n);
   requestAnimationFrame(() => { n.style.transform = 'translateX(0)'; });
   setTimeout(() => {
@@ -92,6 +90,69 @@ function animateCategoryLoad() {
   });
 }
 
+
+function animateMiniStats() {
+  document.querySelectorAll('.mini-progress-fill[data-value]').forEach((bar, i) => {
+    const value = bar.getAttribute('data-value') || '0';
+    bar.style.width = '0%';
+    setTimeout(() => {
+      bar.style.width = `${value}%`;
+    }, 100 + i * 80);
+  });
+}
+
+function animateSkillBars() {
+  const bars = document.querySelectorAll('.progress-bar-fill[data-value]');
+  bars.forEach((bar, i) => {
+    const value = bar.getAttribute('data-value') || '0';
+    bar.style.width = '0%';
+    setTimeout(() => {
+      bar.style.width = `${value}%`;
+    }, 120 + i * 70);
+  });
+}
+
+function renderServersFromConfig() {
+  if (document.body.dataset.page !== 'servers') return;
+  const list = document.getElementById('server-list-dynamic');
+  if (!list || !window.SERVERS_CONFIG || !Array.isArray(window.SERVERS_CONFIG.servers)) return;
+
+  list.innerHTML = '';
+
+  window.SERVERS_CONFIG.servers.forEach((server) => {
+    const item = document.createElement('div');
+    item.className = 'server-item';
+
+    const icon = document.createElement('div');
+    icon.className = 'server-icon custom';
+
+    const img = document.createElement('img');
+    img.src = server.icon;
+    img.alt = `${server.name} logo`;
+    img.loading = 'lazy';
+
+    const fallback = document.createElement('span');
+    fallback.className = 'server-icon-fallback';
+    fallback.textContent = server.fallback || server.name.charAt(0).toUpperCase();
+
+    img.addEventListener('error', () => {
+      img.style.display = 'none';
+      fallback.style.display = 'inline-flex';
+    });
+
+    icon.appendChild(img);
+    icon.appendChild(fallback);
+
+    const info = document.createElement('div');
+    info.className = 'server-info';
+    info.innerHTML = `<h3>${server.name}</h3><span>${server.role}</span>`;
+
+    item.appendChild(icon);
+    item.appendChild(info);
+    list.appendChild(item);
+  });
+}
+
 function setupPageTransitions() {
   const overlay = document.createElement('div');
   overlay.className = 'page-transition-overlay';
@@ -110,7 +171,6 @@ function setupPageTransitions() {
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href');
       if (!href || href.startsWith('#') || !isInternalHtml(href)) return;
-
       e.preventDefault();
       document.body.classList.add('page-leave');
       overlay.classList.add('active');
@@ -149,10 +209,17 @@ window.addEventListener('load', () => {
     currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     localStorage.setItem('theme', currentTheme);
   }
+
   initializeTheme();
   setActiveNavByPage();
   initScrollTopButton();
   animateCategoryLoad();
   setupPageTransitions();
-  if (window.AOS) AOS.init({ duration: 500, easing: 'ease-out-cubic', once: true, offset: 35 });
+  renderServersFromConfig();
+  animateSkillBars();
+  animateMiniStats();
+
+  if (window.AOS) {
+    AOS.init({ duration: 450, easing: 'ease-out-cubic', once: true, offset: 30 });
+  }
 });
