@@ -1411,3 +1411,9 @@
     color: var(--accent-primary);
     font-size: 1rem;
 }
+
+
+/* Text accent utilities */
+.accent-primary { color: var(--accent-primary); }
+.accent-secondary { color: var(--accent-secondary); }
+.accent-tertiary { color: var(--accent-tertiary); }
