@@ -1417,3 +1417,45 @@
 .accent-primary { color: var(--accent-primary); }
 .accent-secondary { color: var(--accent-secondary); }
 .accent-tertiary { color: var(--accent-tertiary); }
+
+/* Category pages and cards */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+}
+
+.category-card {
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 1.2rem;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-hover);
+    box-shadow: 0 15px 30px var(--shadow-light);
+}
+
+.category-card i {
+    font-size: 1.3rem;
+    color: var(--accent-primary);
+    margin-bottom: .5rem;
+}
+
+.category-enter {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: categoryIn .7s ease forwards;
+}
+
+@keyframes categoryIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
