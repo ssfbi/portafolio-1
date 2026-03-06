@@ -7,8 +7,7 @@ function initializeTheme() {
 
 function updateThemeIcon() {
   const icon = document.getElementById('theme-icon');
-  if (!icon) return;
-  icon.className = currentTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+  if (icon) icon.className = currentTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
 }
 
 function toggleTheme() {
@@ -37,9 +36,26 @@ function scrollToTop() {
 
 function openDiscord() {
   const discordUsername = '@srpatoac';
-  navigator.clipboard?.writeText(discordUsername)
-    .then(() => showNotification('Discord copiado: ' + discordUsername))
-    .catch(() => showNotification('Discord: ' + discordUsername));
+  const textToCopy = discordUsername;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => showNotification('Discord copiado: ' + discordUsername))
+      .catch(() => showNotification('Discord: ' + discordUsername));
+    return;
+  }
+
+  const ta = document.createElement('textarea');
+  ta.value = textToCopy;
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    showNotification('Discord copiado: ' + discordUsername);
+  } catch {
+    showNotification('Discord: ' + discordUsername);
+  }
+  document.body.removeChild(ta);
 }
 
 function downloadCV() {
@@ -52,19 +68,19 @@ function showNotification(message) {
   const n = document.createElement('div');
   n.className = 'notification';
   n.textContent = message;
-  n.style.cssText = 'position:fixed;top:6rem;right:2rem;z-index:9999;padding:1rem 1.3rem;border-radius:14px;background:linear-gradient(45deg,#06b6d4,#4f46e5);color:#fff;box-shadow:0 10px 25px rgba(0,0,0,.25);transform:translateX(130%);transition:transform .3s ease';
+  n.style.cssText = 'position:fixed;top:6rem;right:1.2rem;z-index:9999;padding:.9rem 1.1rem;border-radius:12px;background:linear-gradient(45deg,#06b6d4,#4f46e5);color:#fff;box-shadow:0 10px 20px rgba(0,0,0,.22);transform:translateX(120%);transition:transform .25s ease';
   document.body.appendChild(n);
-  requestAnimationFrame(() => n.style.transform = 'translateX(0)');
+  requestAnimationFrame(() => { n.style.transform = 'translateX(0)'; });
   setTimeout(() => {
-    n.style.transform = 'translateX(130%)';
-    setTimeout(() => n.remove(), 300);
-  }, 2200);
+    n.style.transform = 'translateX(120%)';
+    setTimeout(() => n.remove(), 250);
+  }, 1800);
 }
 
 function initScrollTopButton() {
   const btn = document.querySelector('.scroll-top');
   if (!btn) return;
-  const onScroll = () => btn.classList.toggle('visible', window.pageYOffset > 250);
+  const onScroll = () => btn.classList.toggle('visible', window.pageYOffset > 220);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 }
@@ -72,7 +88,41 @@ function initScrollTopButton() {
 function animateCategoryLoad() {
   document.querySelectorAll('.category-page .section').forEach((section, i) => {
     section.classList.add('category-enter');
-    section.style.animationDelay = `${i * 120}ms`;
+    section.style.animationDelay = `${i * 90}ms`;
+  });
+}
+
+function setupPageTransitions() {
+  const overlay = document.createElement('div');
+  overlay.className = 'page-transition-overlay';
+  document.body.appendChild(overlay);
+
+  const isInternalHtml = (url) => {
+    try {
+      const u = new URL(url, window.location.href);
+      return u.origin === window.location.origin && (u.pathname.endsWith('.html') || u.pathname === '/' || u.pathname.endsWith('/'));
+    } catch {
+      return false;
+    }
+  };
+
+  document.querySelectorAll('a.nav-link, a.category-card').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || !isInternalHtml(href)) return;
+
+      e.preventDefault();
+      document.body.classList.add('page-leave');
+      overlay.classList.add('active');
+      setTimeout(() => {
+        window.location.href = href;
+      }, 300);
+    });
+  });
+
+  requestAnimationFrame(() => {
+    document.body.classList.add('page-enter');
+    setTimeout(() => overlay.classList.remove('active'), 350);
   });
 }
 
@@ -95,12 +145,14 @@ document.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('load', () => {
-  if (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    currentTheme = 'dark';
+  if (!localStorage.getItem('theme')) {
+    currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    localStorage.setItem('theme', currentTheme);
   }
   initializeTheme();
   setActiveNavByPage();
   initScrollTopButton();
   animateCategoryLoad();
-  if (window.AOS) AOS.init({ duration: 700, easing: 'ease-in-out', once: true });
+  setupPageTransitions();
+  if (window.AOS) AOS.init({ duration: 500, easing: 'ease-out-cubic', once: true, offset: 35 });
 });

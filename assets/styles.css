@@ -1459,3 +1459,141 @@
         transform: translateY(0);
     }
 }
+
+/* ---------- UX polish + performance overrides ---------- */
+:root {
+    --fast-ease: cubic-bezier(.2,.8,.2,1);
+}
+
+/* Full-page transition between categories */
+.page-transition-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, rgba(6,182,212,0.22), rgba(13,17,23,0.92));
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity .32s var(--fast-ease), transform .32s var(--fast-ease);
+}
+
+.page-transition-overlay.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+body.page-enter .main-content {
+    animation: pageFadeIn .45s var(--fast-ease);
+}
+
+body.page-leave .main-content {
+    opacity: .55;
+    transform: translateY(8px) scale(.995);
+    transition: transform .28s var(--fast-ease), opacity .28s var(--fast-ease);
+}
+
+@keyframes pageFadeIn {
+    from { opacity: .2; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Faster, smoother section entrance */
+.category-enter {
+    animation: categoryIn .42s var(--fast-ease) forwards;
+}
+
+/* Lighter profile animation */
+.profile-img {
+    animation: profileSmooth 5.5s ease-in-out infinite !important;
+    box-shadow: 0 10px 24px var(--glow-primary), 0 0 0 3px rgba(255,255,255,.12) !important;
+    will-change: transform;
+}
+
+.profile-img:hover {
+    transform: scale(1.06) !important;
+}
+
+@keyframes profileSmooth {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+/* Lightweight card interactions */
+.achievement-card,
+.skill-card,
+.education-card,
+.server-item,
+.glass-card,
+.category-card {
+    transition: transform .22s var(--fast-ease), box-shadow .22s var(--fast-ease), border-color .22s var(--fast-ease) !important;
+}
+
+/* Home extras */
+.home-highlight {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .9rem 1rem;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+}
+
+.home-highlight i {
+    color: var(--accent-tertiary);
+}
+
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+}
+
+.stat-card {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: var(--accent-primary);
+    margin-bottom: .35rem;
+}
+
+/* Working social action buttons */
+.social-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: .75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.social-btn {
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    padding: .55rem 1rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+}
+
+.social-btn:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+}
+
+/* Reduce heavy effects on low-power devices */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
